@@ -9,9 +9,10 @@ local storage = {}
 local ERROR_MESSAGE_UNVALID_REASON = "Unvalid reason"
 local ERROR_MESSAGE_UNVALID_MESSAGE = "Unvalid message"
 local ERROR_MESSAGE_UNKNOWN_TICKET = "Unknown ticket"
+local ERROR_MESSAGE_UNVALID_AUTHOR = "Unvalid author"
 
 // TODO: Created_at, Author, Set a gravity by the reason (freekill -> important, help -> low, ...)
-function orm.new(reason, message)
+function orm.new(reason, message, author)
     local self = cosmticket
     local utils = cosmticket.Utils
     if (not utils.IsValidString(reason)) then
@@ -22,11 +23,16 @@ function orm.new(reason, message)
         return false, ERROR_MESSAGE_UNVALID_MESSAGE
     end
 
+    if (not utils.IsValidPlayer(author)) then
+        return false, ERROR_MESSAGE_UNVALID_AUTHOR
+    end
+
     local ticket_id = #storage +1
     local ticket = {
         ["id"] = ticket_id,
         ["reason"] = reason,
-        ["message"] = message
+        ["message"] = message,
+        ["author"] = author
     }
     storage[ticket_id] = ticket
 

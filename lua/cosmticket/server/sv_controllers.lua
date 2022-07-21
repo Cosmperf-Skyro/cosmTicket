@@ -5,7 +5,7 @@ local utils = self.Utils
 local Tickets = self.Tickets
 
 function controller.OnSubmitTicket(reason, description, author)
-    local ticket, message = Tickets.new(reason, description)
+    local ticket, message = Tickets.new(reason, description, author)
     if (!ticket) then
         utils.Notify(message, author)
         return

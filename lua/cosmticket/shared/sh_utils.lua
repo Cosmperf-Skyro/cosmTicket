@@ -20,6 +20,7 @@ function utils.WriteTicket(ticket)
     net.WriteUInt(ticket["id"], 14)
     net.WriteString(ticket["reason"])
     net.WriteString(ticket["message"])
+    net.WriteEntity(ticket["author"])
 end
 
 function utils.ReadTicket()
@@ -28,7 +29,7 @@ function utils.ReadTicket()
     ticket["id"] = net.ReadUInt(14)
     ticket["reason"] = net.ReadString()
     ticket["message"] = net.ReadString()
-
+    ticket["author"] = net.ReadEntity()
     return ticket
 end
 
@@ -38,6 +39,10 @@ function utils.IsValidString(toTest)
 
     toTest = toTest:Trim()
     return toTest:len() > 0
+end
+
+function utils.IsValidPlayer(toTest)
+    return IsValid(toTest) and toTest:IsPlayer()
 end
 
 function utils.Notify(message, target)

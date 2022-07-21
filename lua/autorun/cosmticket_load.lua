@@ -2,7 +2,6 @@
 -- Automatically created by gcreator (github.com/MaaxIT)
 cosmticket = {}
 
-print("HI JORDAN")
 -- Make loading functions
 local function Inclu(f) return include("cosmticket/"..f) end
 local function AddCS(f) return AddCSLuaFile("cosmticket/"..f) end

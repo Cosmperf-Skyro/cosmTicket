@@ -120,28 +120,16 @@ hook.Add("OnPlayerChat", "panelOpen", function(ply, strText, bTeam, bDead)
 end)
 
 local function showTicket(ticket)
-	PrintTable(ticket)
-	chat.AddText(Color(255, 0, 0), "New ticket received !")
-end
+	surface.PlaySound("garrysmod/balloon_pop_cute.wav")
 
-net.Receive("cosmticket:EmitTicket", function()
-	local self = cosmticket
-	local utils = self.Utils
-
-	local ticket = utils.ReadTicket()
-
-	showTicket(ticket)
-end)
-
-function showTicket(ticket)
 	local main_ticket = vgui.Create("DFrame")
 	main_ticket:SetSize(respW(400), respH(250))
 	main_ticket:SetPos(respW(10), respH(10))
 	main_ticket:SetTitle("")
 	main_ticket:SetDraggable(true)
 	main_ticket:ShowCloseButton(false)
-	surface.PlaySound("garrysmod/balloon_pop_cute.wav")
 
+	local author_nick = ticket.author:Nick()
 	function main_ticket:Paint(w, h)
 		draw.RoundedBox(30, 0, 0, w, h, cosmticket.Config.Color)				
 		draw.RoundedBox(0, 0, respH(50), w, respH(3), color_white)
@@ -155,7 +143,7 @@ function showTicket(ticket)
 
 	function toppanel:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(0,0,0,0))
-		draw.SimpleText("Ticket de - ".." WIP", "trebuchet24", respW(25), respH(10), color_white, TEXT_ALIGN_LEFT)
+		draw.SimpleText("Ticket de - "..author_nick, "trebuchet24", respW(25), respH(10), color_white, TEXT_ALIGN_LEFT)
 	end
 
 	local rs = vgui.Create("DPanel", main_ticket)
@@ -183,7 +171,6 @@ function showTicket(ticket)
 	function cl:DoClick()
 		main_ticket:Close()
 	end
-
 
 	local take = vgui.Create("DButton", pticket)
 	take:SetSize(ScrW(), respH(30))
@@ -231,11 +218,15 @@ function showTicket(ticket)
 			RunConsoleCommand("say", "!tp "..creator:SteamID())
 		end
 
-
 	end
 
-
-
-	
 end
 
+net.Receive("cosmticket:EmitTicket", function()
+	local self = cosmticket
+	local utils = self.Utils
+
+	local ticket = utils.ReadTicket()
+
+	showTicket(ticket)
+end)

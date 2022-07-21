@@ -27,12 +27,15 @@ function orm.new(reason, message, author)
         return false, ERROR_MESSAGE_UNVALID_AUTHOR
     end
 
+    local created_at = os.date( "%d/%m/%Y - %H:%M:%S" , os.time())
+
     local ticket_id = #storage +1
     local ticket = {
         ["id"] = ticket_id,
         ["reason"] = reason,
         ["message"] = message,
-        ["author"] = author
+        ["author"] = author,
+        ["created_at"] = created_at
     }
     storage[ticket_id] = ticket
 

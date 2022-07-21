@@ -21,6 +21,7 @@ function utils.WriteTicket(ticket)
     net.WriteString(ticket["reason"])
     net.WriteString(ticket["message"])
     net.WriteEntity(ticket["author"])
+    net.WriteString(ticket["created_at"])
 end
 
 function utils.ReadTicket()
@@ -30,6 +31,7 @@ function utils.ReadTicket()
     ticket["reason"] = net.ReadString()
     ticket["message"] = net.ReadString()
     ticket["author"] = net.ReadEntity()
+    ticket["created_at"] = net.ReadString()
     return ticket
 end
 

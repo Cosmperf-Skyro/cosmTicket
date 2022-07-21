@@ -17,6 +17,7 @@ IncAdd("shared/sh_utils.lua")
 if SERVER then
 
 	Inclu("server/sv_tickets.lua")
+	Inclu("server/sv_controllers.lua")
 	Inclu("server/sv_hooks.lua")
 	Inclu("server/sv_network.lua")
 

@@ -2,10 +2,12 @@ util.AddNetworkString("cosmticket:Submit")
 util.AddNetworkString("cosmticket:EmitTicket")
 util.AddNetworkString("cosmticket:Take")
 util.AddNetworkString("cosmticket:Salle")
+util.AddNetworkString("cosmticket:BookedRoom")
 
 local self = cosmticket
 local utils = self.Utils
 local Tickets = self.Tickets
+local Rooms = self.Rooms
 
 net.Receive("cosmticket:Submit", function(len, author)
 	local reason = net.ReadString()
@@ -22,7 +24,7 @@ end)
 
 
 net.Receive("cosmticket:Take", function(_, sender)
-    local id = net.ReadInt(32)
+    local id = net.ReadInt(14)
 
     if (not utils.IsAdmin(sender)) then
         // TODO: Log -> Try to hack | Severity : Important
@@ -35,27 +37,27 @@ net.Receive("cosmticket:Take", function(_, sender)
         return 
     end
 
-    cosmticket.Controller.OnTicketTake(ticket)
+    cosmticket.Controller.OnTicketTake(ticket, sender)
 end)
 
 net.Receive("cosmticket:Salle", function(_, sender)
-    local id = net.ReadInt(32)
+    local room_id = net.ReadInt(14)
 
-    local ticket = Tickets.get(id)
-
-    if (not utils.isAdmin(sender)) then
-        return
-    end
-    if (!ticket) then 
-        return 
-    end
-
-    if (ticket.author:IsConnected()) then
-        ticket.author:SetPos(Vector(6445.040039, 5424.462402, 896.031250))
-        sender:SetPos(Vector(6445.040039, 5424.462402, 896.031250))
-
-    else
+    local room = Rooms.get(room_id)
+    if (!room) then
+        print("not room")
+        // TODO: Log -> Try to hack | Severity : Important
         return
     end
 
+    if (room["admin"] ~= sender) then
+        print("admin != sender")
+        // TODO: Log -> Try to hack | Severity : Important
+        return
+    end
+
+    local ok, message = Rooms.teleportTo(room_id)
+    if (!ok) then
+        utils.Notify(message, sender)
+    end
 end)

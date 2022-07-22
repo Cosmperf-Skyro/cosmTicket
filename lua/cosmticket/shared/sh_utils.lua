@@ -35,6 +35,19 @@ function utils.ReadTicket()
     return ticket
 end
 
+function utils.WriteRoom(room)
+    net.WriteUInt(room["id"], 14)
+    net.WriteVector(room["position"])
+end
+
+function utils.ReadRoom()
+    local room = {}
+
+    room["id"] = net.ReadUInt(14)
+    room["position"] = net.ReadVector()
+    return room
+end
+
 // VALIDATORS
 function utils.IsValidString(toTest)
     if (not isstring(toTest)) then return false end

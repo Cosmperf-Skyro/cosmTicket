@@ -27,7 +27,7 @@ function PANEL:SizeIn(duration, callback)
 end
 
 
-function admin_sphere()
+function admin_sphere(room)
 	hook.Add( "PostDrawTranslucentRenderables", "cosmticket:Sphere", function()
 
 		-- Set the draw material to solid white
@@ -40,9 +40,9 @@ function admin_sphere()
 		local tallSteps = 100
 	
 		-- Draw the sphere!
-		render.DrawSphere( salle_pos, radius, wideSteps, tallSteps, Color( 0, 175, 175, 0 ) )
+		render.DrawSphere( room["position"], radius, wideSteps, tallSteps, Color( 0, 175, 175, 0 ) )
 	
 		-- Draw the wireframe sphere!
-		render.DrawWireframeSphere( salle_pos, radius, wideSteps, tallSteps, Color( 255, 255, 255, 255 ) )
+		render.DrawWireframeSphere( room["position"], radius, wideSteps, tallSteps, Color( 255, 255, 255, 255 ) )
 	end )
 end

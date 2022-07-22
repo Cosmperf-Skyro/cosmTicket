@@ -3,6 +3,24 @@ hook.Add("OnPlayerChat", "panelOpen", function(ply, strText, bTeam, bDead)
 
 	strText = string.lower( strText )
 
+	if (strText == "!test") then
+		local main = vgui.Create("DFrame")
+		main:SetSize(respW(600), respH(100))
+		main:Center()
+		main:SizeIn()
+		main:MakePopup()
+		main:SetDraggable(false)
+		main:ShowCloseButton(true)
+		main:SetTitle("")
+	
+		local dropdown = vgui.Create("OST:Dropdown", main)
+		dropdown:Dock(FILL)
+		dropdown:SetItems(player.GetAll())
+		function dropdown:MapItem(player)
+			return player:Nick()
+		end
+	end
+
 	if (strText == cosmticket.Config.Command) then
 		------------------------------------------------------------------
 		------------------------------------------------------------------
@@ -121,6 +139,13 @@ end)
 
 local function showTicket(ticket)
 	surface.PlaySound("garrysmod/balloon_pop_cute.wav")
+	local self = cosmticket
+	local utils = self.Utils
+	local room = false
+
+	net.Receive("cosmticket:BookedRoom", function()
+		room = utils.ReadRoom()
+	end)
 
 	local main_ticket = vgui.Create("DFrame")
 	main_ticket:SetSize(respW(400), respH(250))
@@ -183,9 +208,9 @@ local function showTicket(ticket)
 	function take:DoClick()
 		take:Remove()
 		net.Start("cosmticket:Take")
-		net.WriteInt(ticket.id, 32)
+			net.WriteInt(ticket.id, 32)
 		net.SendToServer()
-		
+
 		local go = vgui.Create("DButton", pticket)
 		go:SetSize(ScrW(), respH(30)) 
 		go:SetPos(respW(0), respH(0))
@@ -205,6 +230,7 @@ local function showTicket(ticket)
 			draw.SimpleText("Retourner", "trebuchet24", respW(50), respH(2), color_white, TEXT_ALIGN_CENTER)
 		end
 		function ret:DoClick()
+			// TODO: Nouveau net avec room id en paramètre pour retourner le joueur + admin à l'ancienne pos 
 			RunConsoleCommand("say", "!return "..author_nick)
 		end
 
@@ -216,11 +242,15 @@ local function showTicket(ticket)
 			draw.SimpleText("Téléporter", "trebuchet24", respW(50), respH(2), color_white, TEXT_ALIGN_CENTER)
 		end
 		function tp:DoClick()
-			admin_sphere()
+			if (room) then
+				admin_sphere(room)
 
-			net.Start("cosmticket:Salle")
-			net.WriteInt(ticket.id, 32)
-			net.SendToServer()
+				net.Start("cosmticket:Salle")
+					net.WriteInt(room.id, 32)
+				net.SendToServer()
+			else
+				utils.Notify("Aucune salle d'administration disponible")
+			end
 		end
 
 	end

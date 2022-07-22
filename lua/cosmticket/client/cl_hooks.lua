@@ -170,6 +170,7 @@ local function showTicket(ticket)
 	end
 	function cl:DoClick()
 		main_ticket:Close()
+		hook.Remove("PostDrawTranslucentRenderables", "cosmticket:Sphere")
 	end
 
 	local take = vgui.Create("DButton", pticket)
@@ -193,7 +194,7 @@ local function showTicket(ticket)
 			draw.SimpleText("Aller", "trebuchet24", respW(50), respH(2), color_white, TEXT_ALIGN_CENTER)
 		end
 		function go:DoClick()
-			RunConsoleCommand("say", "!goto "..creator:SteamID())
+			RunConsoleCommand("say", "!goto "..author_nick)
 		end
 
 		local ret = vgui.Create("DButton", pticket)
@@ -204,7 +205,7 @@ local function showTicket(ticket)
 			draw.SimpleText("Retourner", "trebuchet24", respW(50), respH(2), color_white, TEXT_ALIGN_CENTER)
 		end
 		function ret:DoClick()
-			RunConsoleCommand("say", "!return "..creator:SteamID())
+			RunConsoleCommand("say", "!return "..author_nick)
 		end
 
 		local tp = vgui.Create("DButton", pticket)
@@ -215,7 +216,11 @@ local function showTicket(ticket)
 			draw.SimpleText("Téléporter", "trebuchet24", respW(50), respH(2), color_white, TEXT_ALIGN_CENTER)
 		end
 		function tp:DoClick()
-			RunConsoleCommand("say", "!tp "..creator:SteamID())
+			admin_sphere()
+
+			net.Start("cosmticket:Salle")
+			net.WriteInt(ticket.id, 32)
+			net.SendToServer()
 		end
 
 	end

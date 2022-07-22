@@ -24,3 +24,6 @@ cosmticket.Config.adminUsergroup = {
 }
 
 cosmticket.Config.Notification = "Un administrateur vient de prendre votre ticket !"
+
+
+salle_pos = Vector(6445.040039, 5424.462402, 896.031250)

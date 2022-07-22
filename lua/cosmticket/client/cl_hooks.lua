@@ -231,7 +231,10 @@ local function showTicket(ticket)
 		end
 		function ret:DoClick()
 			// TODO: Nouveau net avec room id en paramètre pour retourner le joueur + admin à l'ancienne pos 
-			RunConsoleCommand("say", "!return "..author_nick)
+			net.Start("cosmticket:Return")
+				net.WriteInt(room.id, 32)
+			net.SendToServer()
+			main_ticket:Remove()	
 		end
 
 		local tp = vgui.Create("DButton", pticket)

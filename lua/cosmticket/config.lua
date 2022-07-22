@@ -25,8 +25,8 @@ cosmticket.Config.adminUsergroup = {
 
 cosmticket.Config.adminRooms = {
 	Vector(6445.040039, 5424.462402, 896.031250),
-	Vector(-685.509155, -30.698826, -12653.168945),
-	Vector(682.984802, 86.607315, -12678.076172)
+	Vector(-3243.622803, 14455.592773, 760.031250),
+	Vector(-2818.389404, 7142.057129, 768.031250)
 }
 
 cosmticket.Config.Notification = "Un administrateur vient de prendre votre ticket !"

@@ -3,6 +3,8 @@ util.AddNetworkString("cosmticket:EmitTicket")
 util.AddNetworkString("cosmticket:Take")
 util.AddNetworkString("cosmticket:Salle")
 util.AddNetworkString("cosmticket:BookedRoom")
+util.AddNetworkString("cosmticket:Return")
+util.AddNetworkString("cosmticket:Close")
 
 local self = cosmticket
 local utils = self.Utils
@@ -60,4 +62,11 @@ net.Receive("cosmticket:Salle", function(_, sender)
     if (!ok) then
         utils.Notify(message, sender)
     end
+end)
+
+net.Receive("cosmticket:Return", function (_, sender)
+    local room_id = net.ReadInt(14)
+    local room = Rooms.get(room_id)
+
+    local ok, message = Rooms.returnToPosition(room_id)
 end)
